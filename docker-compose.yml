@@ -1,0 +1,17 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  
+    environment:
+      - REACT_APP_GANACHE_HOST=localhost  
+      - REACT_APP_GANACHE_PORT=7545  
+    depends_on:
+      - ganache
+  ganache:
+    image: trufflesuite/ganache-cli
+    ports:
+      - "7545:7545"

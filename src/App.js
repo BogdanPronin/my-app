@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import ExchangeRates from './components/ExchangeRates';
+import WalletActions from './components/WalletActions';
+import axios from 'axios';
 
-function App() {
+const App = () => {
+  const [rates, setRates] = useState({});
+
+  useEffect(() => {
+    const loadExchangeRates = async () => {
+      try {
+        const response = await axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP');
+        setRates(response.data);
+        console.log('Exchange rates loaded:', response.data);
+      } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+      }
+    };
+
+    loadExchangeRates();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Trading System</h1>
+      <ExchangeRates rates={rates} />
+      <WalletActions rates={rates} />
     </div>
   );
-}
+};
 
 export default App;
